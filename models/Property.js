@@ -1,3 +1,8 @@
+const mongoose  = require("mongoose");
+const Schema = mongoose.Schema;
+
+
+
 
 
 // create property Schema
@@ -15,8 +20,15 @@ const PropertySchema = new Schema({
   },
   price:{
     type:String,
-    required:[true,"Adress field is required"]
+    required:[true,"Price field is required"]
+  },
+  agent:{
+    type:String,
+    required:[true,"Agent field is required"]
   }
+  // picture
+  // area square meters
+
 
 });
 
