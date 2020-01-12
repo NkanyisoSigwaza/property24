@@ -5,11 +5,17 @@ const mongoose = require("mongoose");
 
 const bodyParser = require("body-parser");
 
+
+
 app.use(bodyParser.json());//will pass json data and attatch it to request
 
-mongoose.connect("mongodb+srv://Nkah:ssssssst@cluster0-rn4rk.mongodb.net/test?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true })
+ mongoose.connect("mongodb+srv://Nkah:ssssssst@cluster0-rn4rk.mongodb.net/test?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true
+
+})
 .then(()=> console.log('Database Connection Successful!!'))
 .catch(err => console.error(err));
+
+
 
 
 mongoose.Promise = global.Promise;
