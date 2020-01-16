@@ -25,7 +25,11 @@ const PropertySchema = new Schema({
   agent:{
     type:String,
     required:[true,"Agent field is required"]
+  },
+   img:{
+     data: Buffer, contentType: String //buffer allows you to store images as data in the form of arrays
   }
+
   // picture
   // area square meters
 
