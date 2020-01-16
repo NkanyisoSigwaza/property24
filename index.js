@@ -1,89 +1,53 @@
 const express = require("express");
-
+const routes = require("./routes/api");
 const app = express();
-
 const mongoose = require("mongoose");
 
+var fs = require("fs");
+var Schema = mongoose.Schema;
+var multer = require('multer');
+
 const bodyParser = require("body-parser");
+const crypto = require('crypto');
 
-const Agent = require("./models/agent");
+const getHashedPassword = (password) => {
+    const sha256 = crypto.createHash('sha256');
+    const hash = sha256.update(password).digest('base64');
+    return hash;
+}
+app.use(bodyParser.json());//will pass json data and attatch it to request
 
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+ mongoose.connect("mongodb+srv://Nkah:ssssssst@cluster0-rn4rk.mongodb.net/test?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true
 
-app.set("view engine","ejs");
-
-mongoose.connect("mongodb+srv://Nkah:ssssssst@cluster0-rn4rk.mongodb.net/test?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true })
+})
 .then(()=> console.log('Database Connection Successful!!'))
 .catch(err => console.error(err));
 
 
+
+
 mongoose.Promise = global.Promise;
-
-
-
-app.get("/signup",function(req,res){
-  res.render("signup");
-});
-
-app.get("/eg",function(req,res){
-  res.render("eg");
-});
-
-app.post("/eg",urlencodedParser,function(req,res,next){
-
-    if(req.body.password == req.body.Cpassword){
-
-    Agent.create(req.body).then(function(ninja){
-
-      //res.send(ninja);  // once new ninja has been succesfully added to the database
-      console.log(ninja);
-
-
-    }).catch(next);   // for error handeling if ninja.create fails program will jump to next midle weae
-
-    res.render("signin");
-  }
-  else{
-    res.send("passwords do not match");
-  }
+app.use("/api",routes);
+app.use(multer({ dest: "./uploads/",
+ rename: function (fieldname, filename) {
+   return filename;
+ },
+}));  // use multer to take photo and store it to uploads so that we can use it later
 
 
 
 
 
 
-
-});  // /api/ninjas
-app.post("/profile",urlencodedParser,function(req,res,next){
-
-      console.log(req.body.password);
-      Agent.findOne({email:req.body.email}).then(function(agent){    // returns updated ninja
-        console.log(agent.password);
-        console.log("yeah");
-        if(agent.password == req.body.password){
-          res.render("profile",{agent:agent});
-        }
-        else{
-          res.send("incorrect password");
-        }
-      }).catch(next);
-``
-
-
-
-});
-/*app.post("/eg",urlencodedParser,function(req,res){
-  console.log(req.body);
-  res.send(req.body);
-});*/
-
+// error handeling middleware
 app.use(function(err,req,res,next){
   //console.log(err);
-  res.status(422).send("Incorrect UserName"); // error just a variable  message just a proprty on error
+  res.status(422).send({error:err.message}); // error just a variable  message just a proprty on error
 });
-// 422 status shows something is wrong
-
+// 422 status shows something is wro
 
 app.listen(3000,function(){
-  console.log("Now Lisening to port 3000");
+  console.log("Listening to port 3000");
 });
+
+module.exports = getHashedPassword;
